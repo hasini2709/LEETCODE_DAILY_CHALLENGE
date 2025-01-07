@@ -1,0 +1,55 @@
+DAY 01 : JAN 07 2025 DAILY LEETCODE CHALLENGE
+
+LEETCODE PROBLEM NO : 141 (DETECT A CYCLE)
+
+SOLUTION :
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        if head == None or head.next == None:
+            return False
+        
+        fast = head
+        slow = head
+
+        while fast != None and fast.next != None:
+            slow = slow.next
+            fast = fast.next.next
+
+            if slow == fast:
+                return True
+
+        return False
+
+APPROACH :
+
+Problem Statement
+Given a linked list, determine if it has a cycle. A cycle occurs when a node's next pointer points back to a previous node in the list.
+
+Two Pointer (Floyd’s Tortoise and Hare Algorithm)
+
+Steps:
+
+Initialize two pointers:
+
+slow: Starts at the head and moves one step at a time.
+fast: Starts at the head and moves two steps at a time.
+
+Traverse the list:
+
+If there’s a cycle, the fast pointer will eventually meet the slow pointer.
+If fast reaches null (end of the list), there is no cycle.
+Return true if slow meets fast during traversal; otherwise, return false.
+
+Time Complexity:
+𝑂(𝑛)
+O(n): Both pointers traverse the list at most once.
+Space Complexity:
+𝑂(1)
+O(1): No extra space is used.
