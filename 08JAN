@@ -1,0 +1,61 @@
+LeetCode Problem 1614 is titled "Maximum Nesting Depth of the Parentheses." 
+
+Problem Statement:
+A string s is a valid parentheses string if it consists of only '(' and ')', and it satisfies the rules of balanced parentheses.
+The task is to calculate the maximum nesting depth of the parentheses in s.
+
+Approach:
+Use a counter to track the current depth as you traverse the string.
+Increment the counter for every '('.
+Decrement the counter for every ')'.
+Keep track of the maximum depth encountered during the traversal.
+
+SOLUTION:
+
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int maxDepth(string s) {
+    int currentDepth = 0; // To track the current depth
+    int maxDepth = 0;     // To store the maximum depth encountered
+
+    for (char c : s) {
+        if (c == '(') {
+            currentDepth++;
+            maxDepth = max(maxDepth, currentDepth); // Update max depth
+        } else if (c == ')') {
+            currentDepth--;
+        }
+    }
+    return maxDepth;
+}
+
+int main() {
+    string s;
+    cout << "Enter the string: ";
+    cin >> s;
+    cout << "Maximum nesting depth: " << maxDepth(s) << endl;
+    return 0;
+}
+
+
+Explanation:
+
+Traverse each character in the string.
+Increase currentDepth for '('.
+Decrease currentDepth for ')'.
+Use maxDepth to store the highest value of currentDepth encountered during traversal.
+Return maxDepth as the result.
+
+Complexity:
+
+Time Complexity: 
+𝑂(𝑛)
+O(n), where 
+𝑛
+n is the length of the string.
+Space Complexity: 
+𝑂(1)
+O(1), as only a few variables are used.
