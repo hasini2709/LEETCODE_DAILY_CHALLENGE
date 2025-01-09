@@ -1,0 +1,143 @@
+LeetCode Problem 234: Palindrome Linked List
+The task is to determine if a given singly linked list is a palindrome.
+
+
+SOLUTION:
+
+#include <iostream>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    // Function to reverse a linked list
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
+        while (curr != nullptr) {
+            ListNode* nextNode = curr->next;  // Save the next node
+            curr->next = prev;               // Reverse the link
+            prev = curr;                     // Move prev forward
+            curr = nextNode;                 // Move curr forward
+        }
+        return prev;
+    }
+
+    // Function to check if the linked list is a palindrome
+    bool isPalindrome(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return true; // Single node or empty list is always a palindrome
+        }
+
+        // Step 1: Find the middle of the list
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast->next != nullptr && fast->next->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        // Step 2: Reverse the second half of the list
+        ListNode* secondHalf = reverseList(slow->next);
+
+        // Step 3: Compare the two halves
+        ListNode* firstHalf = head;
+        ListNode* secondHalfCopy = secondHalf; // To restore later
+        while (secondHalf != nullptr) {
+            if (firstHalf->val != secondHalf->val) {
+                reverseList(secondHalfCopy); // Restore the list before returning
+                return false; // Not a palindrome
+            }
+            firstHalf = firstHalf->next;
+            secondHalf = secondHalf->next;
+        }
+
+        // Step 4: Restore the original list (optional)
+        reverseList(secondHalfCopy);
+
+        return true; // Palindrome
+    }
+};
+
+int main() {
+    // Create a linked list: 1 -> 2 -> 2 -> 1
+    ListNode* head = new ListNode(1);
+    head->next = new ListNode(2);
+    head->next->next = new ListNode(2);
+    head->next->next->next = new ListNode(1);
+
+    Solution solution;
+    if (solution.isPalindrome(head)) {
+        cout << "The linked list is a palindrome." << endl;
+    } else {
+        cout << "The linked list is not a palindrome." << endl;
+    }
+
+    return 0;
+}
+
+
+Approach
+1. Identify the Middle of the Linked List
+Use two pointers:
+slow moves one step at a time.
+fast moves two steps at a time.
+When fast reaches the end of the list, slow will be at the middle of the list.
+This step divides the list into two halves.
+2. Reverse the Second Half
+Reverse the second half of the linked list starting from the node after slow.
+Use a helper function to reverse the list. This will help in comparing the two halves.
+3. Compare the Two Halves
+Compare the values of the nodes in the first half and the reversed second half.
+Start one pointer from the head (first half) and another from the reversed second half.
+If all values match, the linked list is a palindrome; otherwise, it is not.
+4. Restore the List
+Reverse the second half back to its original form to maintain the original structure of the linked list.
+This ensures no unintended side effects.
+5. Return the Result
+Return true if all values matched; otherwise, return false.
+Edge Cases
+Empty List or Single Node:
+An empty list or a single-node list is always a palindrome.
+List with Odd or Even Length:
+The approach works seamlessly for both odd and even lengths.
+Negative or Non-Integer Values:
+The algorithm compares the node values as is, so it works for any data type.
+Complexity Analysis
+Time Complexity:
+
+Finding the Middle: 
+𝑂(𝑛)
+O(n), where 
+𝑛
+n is the number of nodes.
+Reversing the Second Half: 
+𝑂(𝑛/2)
+O(n/2) ≈ 
+𝑂(𝑛)
+O(n).
+Comparing the Two Halves: 
+𝑂(𝑛/2)
+O(n/2) ≈ 
+𝑂(𝑛)
+O(n).
+Restoring the List: 
+𝑂(𝑛/2)
+O(n/2) ≈ 
+𝑂(𝑛)
+O(n).
+Total: 
+𝑂(𝑛)
+O(n).
+Space Complexity:
+
+𝑂(1)
+O(1), as the algorithm uses a constant amount of extra space.
