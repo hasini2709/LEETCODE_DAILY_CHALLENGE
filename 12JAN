@@ -1,0 +1,69 @@
+Problem Statement:
+LeetCode Problem 22: Generate Parentheses
+
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses. A well-formed parentheses string satisfies the following:
+
+Every opening parenthesis ( must have a corresponding closing parenthesis ).
+A closing parenthesis ) cannot appear before its matching opening parenthesis (.
+Input:
+n (integer): Number of pairs of parentheses.
+Output:
+A vector of strings containing all valid combinations of parentheses.
+Approach:
+We use backtracking to generate all valid combinations of parentheses. The key is to ensure that:
+
+At any point, the number of closing parentheses ) does not exceed the number of opening parentheses (.
+We stop adding new parentheses once we’ve used n opening and n closing parentheses.
+Steps:
+Start with an empty string and recursively build the valid combinations.
+Track the count of:
+Open parentheses added (open).
+Close parentheses added (close).
+Stop recursion when the string length reaches 2 * n (as each pair contributes two characters).
+At each step:
+Add an open parenthesis ( if open < n.
+Add a close parenthesis ) if close < open.
+
+
+
+SOLUTION:
+
+class Solution {
+public:
+    // Helper function for backtracking
+    void backtrack(vector<string> &result, string current, int open, int close, int max) {
+        // Base case: if the current string reaches the maximum length
+        if (current.length() == max * 2) {
+            result.push_back(current); // Add the valid combination to the result
+            return;
+        }
+
+        // Add an open parenthesis if we have not used all open parentheses
+        if (open < max) {
+            backtrack(result, current + "(", open + 1, close, max);
+        }
+
+        // Add a close parenthesis if it won't create an invalid combination
+        if (close < open) {
+            backtrack(result, current + ")", open, close + 1, max);
+        }
+    }
+
+    vector<string> generateParenthesis(int n) {
+        vector<string> result; // Stores all valid combinations
+        backtrack(result, "", 0, 0, n); // Start backtracking
+        return result; // Return the result
+    }
+};
+
+
+
+Complexity:
+Time Complexity:
+Exponential Growth: The number of valid combinations is the nth Catalan number, approximately 
+𝑂(4𝑛/𝑛)
+O(4 n/ n ).
+Space Complexity:
+𝑂(𝑛)
+O(n): Depth of recursion tree (due to current string and recursion stack).
+This solution ensures all valid combinations are generated efficiently.
