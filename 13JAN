@@ -1,0 +1,72 @@
+Problem Statement:
+LeetCode Problem 38: Count and Say
+
+The "Count and Say" sequence is a sequence of digits where each term is derived by describing the previous term. The sequence starts with 1.
+
+For example:
+
+Term 1: 1
+Term 2: 11 (one 1)
+Term 3: 21 (two 1s)
+Term 4: 1211 (one 2, then one 1)
+Term 5: 111221 (one 1, one 2, then two 1s)
+Given an integer n, the task is to return the nth term in the "Count and Say" sequence.
+
+Approach:
+The problem can be solved recursively or iteratively. Below is an approach that involves constructing the sequence step by step:
+
+Approach Breakdown:
+Base Case:
+The first term of the sequence is simply "1", so if n == 1, we return "1".
+
+Recursive Step:
+For each subsequent term, we generate the sequence by reading the previous term. The pattern is to count how many times each digit appears consecutively and then append that count followed by the digit.
+
+Iterate Over the Previous Term:
+
+Start by counting the consecutive digits in the string.
+Append the count followed by the digit to the result string.
+When a new digit is encountered, reset the count and continue for the next group of digits.
+Recursive Function:
+
+We can call the countAndSay function recursively to build up the sequence. If we are looking for the nth term, we calculate the sequence for n-1 and then build the nth term from it.
+Final Step:
+
+After iterating through the entire string, the result contains the required term of the sequence.
+
+SOLUTION:
+
+class Solution {
+public:
+    string countAndSay(int n) {
+        if (n == 1) return "1"; // Base case: the 1st term is "1"
+        
+        // Recursively get the previous term
+        string prev = countAndSay(n - 1); 
+        string result = ""; // String to build the current term
+        int count = 1; // Counter to count consecutive digits
+        
+        // Traverse the previous term
+        for (int i = 1; i < prev.size(); ++i) {
+            if (prev[i] == prev[i - 1]) {
+                count++; // If same digit, increment the count
+            } else {
+                // Otherwise, append the count and the digit
+                result += to_string(count) + prev[i - 1];
+                count = 1; // Reset the count for the new digit
+            }
+        }
+        
+        // After the loop, add the last group of digits
+        result += to_string(count) + prev.back();
+        
+        return result; // Return the generated term
+    }
+};
+Time Complexity:
+Time Complexity: The time complexity is approximately 
+𝑂(𝑘⋅2𝑘)O(k⋅2 k), where 𝑘
+k is the length of the string. This is due to the fact that each iteration of counting digits involves string construction and recursion.
+Space Complexity: The space complexity is 
+𝑂(𝑘)
+O(k) due to the space required for storing the current term string.
