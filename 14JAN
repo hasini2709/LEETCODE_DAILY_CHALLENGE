@@ -1,0 +1,97 @@
+Problem Statement: Simplify Path (LeetCode Problem 71)
+You are given a string path, which represents the absolute path to a file or directory in a Unix-style file system. Your task is to simplify the path according to these rules:
+
+. refers to the current directory.
+.. refers to the parent directory. If already at the root directory, .. does nothing.
+Consecutive slashes // are treated as a single /.
+The simplified path must:
+Start with a single slash /.
+Not end with a trailing slash unless it is the root directory.
+Only contain directories in the canonical order.
+Constraints:
+The given string path is guaranteed to be a valid absolute path.
+Approach:
+To simplify the path:
+
+Split the Path into Components:
+
+Use / as the delimiter to split the path into components.
+Ignore empty components or components like . (current directory).
+Use a Stack:
+
+Push valid directory names onto a stack.
+Pop from the stack when encountering .. (go up one directory), unless the stack is empty.
+Construct the Simplified Path:
+
+Concatenate the stack elements with / as a separator.
+Ensure the result starts with / and does not have redundant slashes.
+
+
+SOLUTION:
+
+#include <iostream>
+#include <string>
+#include <stack>
+#include <sstream>
+using namespace std;
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stack<string> st;         // Stack to store valid directory names
+        string current, result;  // Temporary variables to store components
+        stringstream ss(path);   // Stream to split the path by '/'
+        
+        // Split the path by '/' and process each component
+        while (getline(ss, current, '/')) {
+            if (current == "." || current.empty()) {
+                continue; // Ignore '.' or empty strings
+            } else if (current == "..") {
+                if (!st.empty()) {
+                    st.pop(); // Go up one directory
+                }
+            } else {
+                st.push(current); // Push valid directory names
+            }
+        }
+        
+        // Rebuild the simplified path from the stack
+        while (!st.empty()) {
+            result = "/" + st.top() + result; // Add directories from the stack
+            st.pop();
+        }
+        
+        return result.empty() ? "/" : result; // Return '/' if the result is empty
+    }
+};
+
+int main() {
+    Solution sol;
+    string path = "/a/./b/../../c/";
+    cout << sol.simplifyPath(path) << endl; // Output: "/c"
+    return 0;
+}
+
+
+Complexity Analysis:
+Time Complexity: 
+𝑂
+(
+𝑛
+)
+O(n)
+Splitting the path into components takes 
+𝑂
+(
+𝑛
+)
+O(n), where 
+𝑛
+n is the length of the input string.
+Each component is processed once.
+Space Complexity: 
+𝑂(𝑛)
+O(n)
+The stack stores directory names, which in the worst case can take 
+𝑂(𝑛)
+O(n) space.
