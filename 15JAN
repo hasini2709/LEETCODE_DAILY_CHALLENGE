@@ -1,0 +1,81 @@
+Problem Statement
+Given the head of a singly linked list, group all nodes with odd indices together followed by all nodes with even indices, and return the reordered list. The indices of the nodes are considered starting from 1 (1-based indexing). The relative order of nodes in both the odd and even groups should remain the same as in the original list.
+
+Constraints:
+
+The number of nodes in the list is in the range [0, 10^4].
+-10^6 <= Node.val <= 10^6.
+
+Approach
+To solve the problem, the key idea is to rearrange the nodes in the original list without creating new nodes or using extra space. The solution requires three main steps:
+
+Initialization:
+
+If the list has fewer than two nodes, it is already ordered, so return the head.
+Create two pointers: odd to traverse the odd-indexed nodes and even to traverse the even-indexed nodes. Also, maintain a pointer evenHead to store the head of the even-indexed list for later concatenation.
+Reordering:
+
+Traverse the list, alternating between odd and even pointers:
+Link the odd pointer's next to the node after the even pointer.
+Link the even pointer's next to the node after the updated odd pointer.
+Continue this process until either even or even->next becomes nullptr.
+Combine Odd and Even Lists:
+
+After the reordering, attach the evenHead list to the end of the odd list.
+Return the Modified List:
+
+The head of the modified list (starting with odd-indexed nodes) is returned.
+
+
+SOLUTION:
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head || !head->next) {
+            return head; // No need to reorder
+        }
+
+        ListNode* odd = head;            // Pointer to the first odd node
+        ListNode* even = head->next;     // Pointer to the first even node
+        ListNode* evenHead = even;       // Save the head of the even list
+
+        while (even && even->next) {
+            odd->next = even->next;      // Link the next odd node
+            odd = odd->next;             // Move the odd pointer forward
+
+            even->next = odd->next;      // Link the next even node
+            even = even->next;           // Move the even pointer forward
+        }
+
+        odd->next = evenHead;            // Connect odd list to even list
+        return head;                     // Return the reordered list
+    }
+};
+
+
+Complexity Analysis
+Time Complexity: 
+𝑂(𝑛)
+O(n)
+
+The list is traversed once using a single while loop, where 
+𝑛
+n is the number of nodes in the list.
+Space Complexity: 
+𝑂(1)
+O(1)
+
+No additional space is used; the reordering is done in-place.
