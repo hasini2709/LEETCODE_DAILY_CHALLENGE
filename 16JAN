@@ -1,0 +1,60 @@
+Problem Statement (LeetCode Problem 19: Remove Nth Node From End of List)
+Given the head of a linked list, remove the n-th node from the end of the list and return its head.
+
+
+Approach
+To solve this problem, we can use a two-pointer approach to find the n-th node from the end of the list in a single pass. The key idea is:
+
+Use two pointers:
+
+The first pointer (first) will move n steps ahead from the head.
+The second pointer (second) will start from the head and will move at the same speed as the first pointer after the first pointer is n steps ahead.
+When the first pointer reaches the end, the second pointer will be pointing to the node just before the node that needs to be removed.
+Handle edge cases:
+
+If n equals the length of the list, it means we need to remove the first node.
+If the list is empty (head is NULL), return NULL.
+
+Steps
+Initialize two pointers: first and second, both starting at the head of the list.
+Move the first pointer n steps ahead.
+Move both pointers (first and second) one step at a time until first reaches the end of the list.
+Remove the node by updating the next pointer of the second node.
+
+SOLUTION:
+
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // Create a dummy node to handle edge cases (e.g., removing the head node)
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        
+        // Initialize two pointers, both starting at the dummy node
+        ListNode* first = dummy;
+        ListNode* second = dummy;
+        
+        // Move first pointer n+1 steps ahead to maintain the gap
+        for (int i = 1; i <= n + 1; i++) {
+            first = first->next;
+        }
+        
+        // Move both pointers until the first pointer reaches the end
+        while (first != nullptr) {
+            first = first->next;
+            second = second->next;
+        }
+        
+        // Now, second pointer is just before the node to be removed
+        second->next = second->next->next;
+        
+        // Return the updated list (dummy->next is the new head)
+        return dummy->next;
+    }
+};
+
+
+Time Complexity:
+O(L) where L is the length of the linked list. We only traverse the list once.
+Space Complexity:
+O(1). The space complexity is constant since we're only using two pointers, irrespective of the size of the list.
