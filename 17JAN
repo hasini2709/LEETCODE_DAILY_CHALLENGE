@@ -1,0 +1,64 @@
+Problem Statement:
+Problem:
+Given the head of a singly linked list, delete the middle node and return the updated list. If there are two middle nodes, delete the second middle node.
+
+Approach:
+To solve this problem efficiently, we can use the two-pointer technique (also known as the slow and fast pointers):
+
+Edge Case: If the linked list is empty or contains only one node, we return None as there is no middle node to remove.
+
+Initialize Pointers:
+
+Use two pointers: slow and fast.
+The slow pointer moves one step at a time, while the fast pointer moves two steps at a time.
+Traverse the List:
+
+Move fast by two steps and slow by one step.
+Continue this until fast reaches the end of the list. At this point, slow will be at the middle node.
+Delete the Middle Node:
+
+Keep track of the node before slow using a prev pointer.
+Once slow reaches the middle, update prev.next = slow.next to remove the middle node.
+Return the Updated List:
+
+After the middle node is deleted, return the modified list starting from head.
+
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def deleteMiddle(self, head: ListNode) -> ListNode:
+        # Edge case: If the list is empty or has only one node
+        if not head or not head.next:
+            return None
+        
+        slow = head
+        fast = head
+        prev = None  # To keep track of the node before slow
+
+        # Traverse the list with two pointers
+        while fast and fast.next:
+            fast = fast.next.next
+            prev = slow
+            slow = slow.next
+        
+        # Delete the middle node
+        if prev:
+            prev.next = slow.next  # Remove the middle node
+        
+        return head  # Return the modified list
+
+
+Time and Space Complexity:
+Time Complexity: 
+𝑂(𝑛)
+O(n), where 
+
+n is the number of nodes in the linked list. We only need to traverse the list once using the slow and fast pointers.
+
+Space Complexity: 
+𝑂(1)
+O(1), since we only use a constant amount of extra space (for the slow, fast, and prev pointers).
