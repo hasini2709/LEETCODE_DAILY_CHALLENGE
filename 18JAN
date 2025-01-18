@@ -1,0 +1,114 @@
+Problem Statement:
+LeetCode Problem No. 2: Add Two Numbers
+
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Example:
+Input:
+l1 = [2,4,3], l2 = [5,6,4]
+Output:
+[7,0,8]
+Explanation:
+342 + 465 = 807 (stored as 7 -> 0 -> 8).
+
+Approach:
+Initialize Pointers: Use two pointers to traverse the two linked lists (l1 and l2). Start with a carry value of 0.
+Iterate Through Lists: Traverse both lists while either list has nodes or there is a carry:
+Compute the sum of the values of the current nodes (if they exist) and the carry.
+Update the carry for the next addition (carry = sum / 10).
+Create a new node with the value sum % 10 and add it to the result list.
+Handle Remaining Carry: If there is still a carry left after processing both lists, add a new node with the carry value.
+Return the Result: Return the head of the newly formed linked list.
+
+SOLUTION:
+
+#include <iostream>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy = new ListNode(); // Dummy node to simplify result list creation
+        ListNode* current = dummy; // Pointer to build the result list
+        int carry = 0; // Initialize carry to 0
+
+        while (l1 != nullptr || l2 != nullptr || carry != 0) {
+            int sum = carry; // Start with the carry
+
+            if (l1 != nullptr) {
+                sum += l1->val; // Add l1's value to sum
+                l1 = l1->next; // Move to the next node in l1
+            }
+
+            if (l2 != nullptr) {
+                sum += l2->val; // Add l2's value to sum
+                l2 = l2->next; // Move to the next node in l2
+            }
+
+            carry = sum / 10; // Update carry
+            current->next = new ListNode(sum % 10); // Create a new node for the current digit
+            current = current->next; // Move the current pointer
+        }
+
+        return dummy->next; // Return the next node of dummy, which is the head of the result list
+    }
+};
+
+// Helper functions to create and print linked lists
+void printList(ListNode* head) {
+    while (head != nullptr) {
+        cout << head->val << " ";
+        head = head->next;
+    }
+    cout << endl;
+}
+
+ListNode* createList(const vector<int>& values) {
+    ListNode* dummy = new ListNode();
+    ListNode* current = dummy;
+    for (int val : values) {
+        current->next = new ListNode(val);
+        current = current->next;
+    }
+    return dummy->next;
+}
+
+// Example usage
+int main() {
+    Solution solution;
+
+    // Create input linked lists
+    ListNode* l1 = createList({2, 4, 3});
+    ListNode* l2 = createList({5, 6, 4});
+
+    // Compute the sum
+    ListNode* result = solution.addTwoNumbers(l1, l2);
+
+    // Print the result
+    printList(result);
+
+    return 0;
+}
+
+
+Time Complexity:
+O(max(m, n)): Where m and n are the lengths of the two lists. Each node is processed once.
+Space Complexity:
+O(max(m, n)): For the new linked list.
+
+
+
+
+
+
