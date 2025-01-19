@@ -1,0 +1,114 @@
+Problem Statement: LeetCode Problem 148 - Sort List
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+You must use O(n log n) time complexity and work with only O(1) extra memory (apart from the recursion stack).
+
+Approach: Merge Sort for Linked List
+To sort a linked list efficiently in 
+𝑂(𝑛log𝑛)
+O(nlogn), we use merge sort because it naturally fits the linked list structure and achieves the required time complexity.
+
+Key Steps:
+Finding the Middle:
+
+Use the slow and fast pointer technique to locate the middle of the linked list.
+This allows splitting the list into two halves for the divide-and-conquer approach.
+Recursive Sorting:
+
+Recursively sort the left and right halves of the list.
+Merge the Sorted Halves:
+
+Merge the two sorted halves using a helper function.
+Base Case:
+
+If the list is empty or contains a single node, return the list as it's already sorted.
+
+
+SOLUTION:
+
+#include <iostream>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    // Helper function to merge two sorted linked lists
+    ListNode* merge(ListNode* l1, ListNode* l2) {
+        ListNode dummy; // Dummy node to simplify merging
+        ListNode* tail = &dummy;
+
+        while (l1 && l2) {
+            if (l1->val <= l2->val) {
+                tail->next = l1;
+                l1 = l1->next;
+            } else {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+
+        // Attach the remaining nodes
+        if (l1) tail->next = l1;
+        if (l2) tail->next = l2;
+
+        return dummy.next;
+    }
+
+    // Helper function to find the middle of the linked list
+    ListNode* findMiddle(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head->next;
+
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        return slow;
+    }
+
+    // Main function to sort the linked list
+    ListNode* sortList(ListNode* head) {
+        if (!head || !head->next) return head; // Base case
+
+        // Find the middle and split the list
+        ListNode* middle = findMiddle(head);
+        ListNode* right = middle->next;
+        middle->next = nullptr; // Split the list into two halves
+        ListNode* left = head;
+
+        // Recursively sort both halves
+        left = sortList(left);
+        right = sortList(right);
+
+        // Merge the sorted halves
+        return merge(left, right);
+    }
+};
+
+
+Complexity Analysis:
+Time Complexity: 
+O(nlogn)
+
+Finding the middle: 
+
+O(n)
+Merging two lists: 
+
+O(n)
+Recursive calls: 
+logn levels.
+Space Complexity: 
+𝑂(log⁡𝑛)
+
+Due to the recursion stack, which is proportional to the depth of the recursion tree.
