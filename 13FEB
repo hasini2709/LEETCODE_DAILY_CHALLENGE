@@ -1,0 +1,32 @@
+VALIDATE BINARY SEARCH TREE
+
+
+My Intuition:
+1.check if root == null if yes return true as it always true
+
+now take minVal and maxVal and initialize minVal with LONG_MIN and maxVal with LONG_MAX so that we considering min value is the least possible value and max value is the highest possible value
+
+now check if root->val is less than or equal to minVal or root->val is greater than or equal to maxVal if any of these conditions pass it will be false
+
+and finally return isValidBST(root->left,minVal,root->val) &&
+isValidBST(root->right,root->val,maxVal);
+
+here when checking left subtree , minVal remains same and maxVal is updated to root->val
+
+when checking right subtree ,minVal is updated to root->val and maxVal remains same
+
+SOLUTION:
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root,long minVal = LONG_MIN,long maxVal = LONG_MAX) {
+        if(root == NULL){
+            return true;
+        }
+        if(root->val <= minVal || root->val >= maxVal){
+            return false;
+        }
+        return isValidBST(root->left,minVal,root->val) && 
+        isValidBST(root->right,root->val,maxVal);
+    }
+};
